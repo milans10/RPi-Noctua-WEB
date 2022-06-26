@@ -1,0 +1,82 @@
+<!--
+  ~ Vytvořil Milan Švarc v roce 2022.
+  -->
+
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RPi + Noctua</title>
+    <link href="{{ url_for('static', path='/styles.css') }}" rel="stylesheet">
+
+    <script type="text/javascript">
+        function display_c(){
+            var refresh=1000; // Refresh rate in milli seconds
+            mytime=setTimeout('display_ct()',refresh)
+        }
+
+        function display_ct() {
+            var x = new Date()
+            var den=new Array(7);
+            den[0]='Neděle'
+            den[1]='Pondělí'
+            den[2]='Úterý'
+            den[3]='Středa'
+            den[4]='Čtvrtek'
+            den[5]='Pátek'
+            den[6]='Sobota'
+
+            ak_den = den[x.getDay()]
+            ak_datum = x.getDate() + "." + (x.getMonth() + 1) + "." + x.getFullYear();
+            ak_cas = x.getHours( )+ ":" +  x.getMinutes() + ":" +  x.getSeconds();
+            aktualne = ak_den +" "+ ak_datum +"<br>"+ ak_cas
+            document.getElementById('ct').innerHTML = aktualne;
+            display_c();
+         }
+
+
+
+
+    </script>
+</head>
+
+<body onload=display_ct()>
+<div>
+    <h1 align="center">Raspberry Pi s automaticky řízeným větrákem Noctua a logování do SQLite</h1>
+</div>
+<div class="row">
+    <div class="column">
+        <div class="aktualne">
+            <p id='ct' align="right"></p>
+            <p align="center">Aktuální teplota: <span id="{{barva}}">{{teplota}} °C</span></p>
+            <p align="center">vytvořil: <span id="jmeno">Milan Švarc</span></p>
+            <img src="{{ url_for('img', path='/Raspberry_Pi_Logo.svg') }}" alt="Raspberry Pi">
+        </div>
+    </div>
+    <div class="column">
+        <div class="table-wrapper">
+            <table class="fl-table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>ČAS</th>
+                    <th>TEPLOTA</th>
+                    <th>NOCTUA</th>
+                </tr>
+                </thead>
+                {% for polozka in polozka_id %}
+                <tr>
+                    <td>{{polozka.id}}</td>
+                    <td>{{polozka.cas}}</td>
+                    <td>{{polozka.teplota}}</td>
+                    <td>{{polozka.noctua}}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>
